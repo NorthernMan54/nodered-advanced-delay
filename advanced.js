@@ -21,7 +21,7 @@ module.exports = function(RED) {
   var MILLIS_TO_NANOS = 1000000;
   var SECONDS_TO_NANOS = 1000000000;
 
-  function DelayNode(n) {
+  function advDelayNode(n) {
     RED.nodes.createNode(this, n);
 
     this.pauseType = n.pauseType;
@@ -90,7 +90,7 @@ module.exports = function(RED) {
       });
     };
 
-    if (node.pauseType === "adv-delay") {
+    if (node.pauseType === "delay") {
       node.on("input", function(msg) {
         var id = setTimeout(function() {
           node.idList.splice(node.idList.indexOf(id), 1);
@@ -117,7 +117,7 @@ module.exports = function(RED) {
     } else if (node.pauseType === "delayv") {
       node.on("input", function(msg) {
         var delayvar = Number(node.timeout);
-        if (msg.hasOwnProperty("adv-delay") && !isNaN(parseFloat(msg.delay))) {
+        if (msg.hasOwnProperty("delay") && !isNaN(parseFloat(msg.delay))) {
           delayvar = parseFloat(msg.delay);
         }
         if (delayvar < 0) {
@@ -278,5 +278,5 @@ module.exports = function(RED) {
       });
     }
   }
-  RED.nodes.registerType("adv-delay", DelayNode);
+  RED.nodes.registerType("advDelay", advDelayNode);
 };
