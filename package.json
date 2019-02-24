@@ -1,0 +1,28 @@
+{
+  "name": "nodered-advanced-delay",
+  "version": "0.0.21",
+  "description": "NodeRED Advanced delay node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "document": "./gh-md-toc --insert README.md"
+  },
+  "node-red": {
+    "nodes": {
+      "nodered-advanced-delay": "advanced.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NorthernMan54/nodered-advanced-delay.git"
+  },
+  "dependencies": {
+    "debug": ">2.6.9"
+  },
+  "author": "NorthernMan54",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NorthernMan54/nodered-advanced-delay/issues"
+  },
+  "homepage": "https://github.com/NorthernMan54/nodered-advanced-delay#readme"
+}
