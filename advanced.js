@@ -28,6 +28,7 @@ module.exports = function(RED) {
     this.timeoutUnits = n.timeoutUnits;
     this.randomUnits = n.randomUnits;
     this.rateUnits = n.rateUnits;
+    this.default = n.default;
 
     if (n.timeoutUnits === "milliseconds") {
       this.timeout = n.timeout;
@@ -90,22 +91,44 @@ module.exports = function(RED) {
       });
     };
 
+    var immediateSend = function() {
+      for (var i = 0; i < node.idList.length; i++) {
+        clearTimeout(node.idList[i]);
+      }
+      node.idList = [];
+      node.status({});
+      if (node.message) {
+        node.send(node.message);
+        node.message = null;
+      } else if (node.default) {
+        node.send({
+          payload: node.default
+        });
+      }
+    };
+
     if (node.pauseType === "delay") {
       node.on("input", function(msg) {
-        var id = setTimeout(function() {
-          node.idList.splice(node.idList.indexOf(id), 1);
-          if (node.idList.length === 0) {
-            node.status({});
+        if (msg.payload === "immediate") {
+          immediateSend();
+        } else {
+          node.message = msg;
+          var id = setTimeout(function() {
+            node.idList.splice(node.idList.indexOf(id), 1);
+            if (node.idList.length === 0) {
+              node.status({});
+            }
+            node.send(node.message);
+            node.message = null;
+          }, node.timeout);
+          node.idList.push(id);
+          if ((node.timeout > 1000) && (node.idList.length !== 0)) {
+            node.status({
+              fill: "blue",
+              shape: "dot",
+              text: " "
+            });
           }
-          node.send(msg);
-        }, node.timeout);
-        node.idList.push(id);
-        if ((node.timeout > 1000) && (node.idList.length !== 0)) {
-          node.status({
-            fill: "blue",
-            shape: "dot",
-            text: " "
-          });
         }
         if (msg.hasOwnProperty("reset")) {
           clearDelayList();

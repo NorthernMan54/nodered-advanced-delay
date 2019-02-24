@@ -242,7 +242,8 @@
         "msgper": "msg(s) per",
         "dropmsg": "drop intermediate messages",
         "label": {
-            "delay": "delay",
+            "delay": "advDelay",
+            "default": "default",
             "variable": "variable",
             "limit": "limit",
             "limitTopic": "limit topic",
